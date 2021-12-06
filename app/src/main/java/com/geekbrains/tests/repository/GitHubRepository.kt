@@ -6,13 +6,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-internal class GitHubRepository(private val gitHubApi: GitHubApi) : RepositoryContract {
+internal class GitHubRepository(private val gitHubApi: ApiHolder) : RepositoryContract {
 
     override fun searchGithub(
         query: String,
         callback: RepositoryCallback
     ) {
-        val call = gitHubApi.searchGithub(query)
+        val call = gitHubApi.api.searchGithub(query)
         call?.enqueue(object : Callback<SearchResponse?> {
 
             override fun onResponse(
