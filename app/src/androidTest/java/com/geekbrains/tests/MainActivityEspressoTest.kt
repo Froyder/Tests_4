@@ -91,8 +91,18 @@ class MainActivityEspressoTest {
             onView(withId(R.id.mainCountTextView)).check(matches(withText("Number of results: 42")))
         } else {
             onView(isRoot()).perform(delay())
-            onView(withId(R.id.mainCountTextView)).check(matches(withText("Number of results: 2692")))
+            onView(withId(R.id.mainCountTextView)).check(matches(withText("Number of results: 2693")))
         }
+    }
+
+    @Test
+    fun activityToDetailsButton_IsWorking() {
+        onView(withId(R.id.toDetailsActivityButton)).perform(click())
+
+        //проверяем, что после нажатия на кнопку на экране появились элементы из другой активити
+        onView(withId(R.id.detailsCountTextView)).check(matches(isDisplayed()))
+        onView(withId(R.id.incrementButton)).check(matches(isDisplayed()))
+        onView(withId(R.id.decrementButton)).check(matches(isDisplayed()))
     }
 
     private fun delay(): ViewAction? {
