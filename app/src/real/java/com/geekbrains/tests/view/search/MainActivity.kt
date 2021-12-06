@@ -6,16 +6,15 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView.OnEditorActionListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.geekbrains.tests.BuildConfig
 import com.geekbrains.tests.R
 import com.geekbrains.tests.model.SearchResult
 import com.geekbrains.tests.presenter.RepositoryContract
 import com.geekbrains.tests.presenter.search.PresenterSearchContract
 import com.geekbrains.tests.presenter.search.SearchPresenter
-import com.geekbrains.tests.repository.FakeGitHubRepository
 import com.geekbrains.tests.repository.GitHubApi
 import com.geekbrains.tests.repository.GitHubRepository
 import com.geekbrains.tests.view.details.DetailsActivity
+import kotlinx.android.synthetic.main.activity_details.*
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -81,7 +80,7 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         searchResults: List<SearchResult>,
         totalCount: Int
     ) {
-        with(totalCountTextView) {
+        with(mainCountTextView) {
             visibility = View.VISIBLE
             text =
                 String.format(Locale.getDefault(), getString(R.string.results_count), totalCount)

@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         searchResults: List<SearchResult>,
         totalCount: Int
     ) {
-        with(totalCountTextView) {
+        with(mainCountTextView) {
             visibility = View.VISIBLE
             text =
                 String.format(Locale.getDefault(), getString(R.string.results_count), totalCount)
