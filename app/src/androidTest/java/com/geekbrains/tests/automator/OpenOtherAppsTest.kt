@@ -59,6 +59,20 @@ class OpenOtherAppsTest {
         val settingsValidation =
             uiDevice.findObject(UiSelector().packageName("com.android.settings"))
         Assert.assertTrue(settingsValidation.exists())
+
+        val settingsViews = UiScrollable(UiSelector().scrollable(true))
+        val settingsSound =
+            settingsViews.getChildByText(UiSelector().className(TextView::class.java.name),"Sound")
+
+        settingsSound.clickAndWaitForNewWindow()
+
+        val settingsSoundViews = UiScrollable(UiSelector().scrollable(true))
+        val settingsVibrate =
+            settingsSoundViews.getChildByText(UiSelector().className(TextView::class.java.name),"Vibrate for calls")
+
+        settingsVibrate.click()
+
+        uiDevice.pressHome()
     }
 
 }
