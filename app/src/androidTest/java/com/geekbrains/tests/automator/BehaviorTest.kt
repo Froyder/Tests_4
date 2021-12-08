@@ -3,16 +3,13 @@ package com.geekbrains.tests.automator
 import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider.*
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
-import com.geekbrains.tests.R
+import androidx.test.uiautomator.Until.findObject
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -116,21 +113,96 @@ class BehaviorTest {
         val searchButton = uiDevice.findObject(By.res(packageName, "searchActivityButton"))
         searchButton.click()
 
-        sleep(3000L)
+        sleep(TIMEOUT)
 
         val toDetails = uiDevice.findObject(By.res(packageName, "toDetailsActivityButton"))
         toDetails.click()
 
         val detailsText =
-            uiDevice.wait(
-                Until.findObject(By.res(packageName, "detailsCountTextView")),
+            uiDevice.wait(findObject(By.res(packageName, "detailsCountTextView")),
                 TIMEOUT
             )
 
         Assert.assertEquals(detailsText.text, "Number of results: 690")
     }
 
+    @Test
+    fun test_DetailsTextIncrement() {
+
+        val editText = uiDevice.findObject(By.res(packageName, "searchEditText"))
+        editText.text = "UiAutomator"
+
+        val searchButton = uiDevice.findObject(By.res(packageName, "searchActivityButton"))
+        searchButton.click()
+
+        sleep(TIMEOUT)
+
+        val toDetails = uiDevice.findObject(By.res(packageName, "toDetailsActivityButton"))
+        toDetails.click()
+
+        val incrementButton =
+            uiDevice.wait(findObject(By.res(packageName, "incrementButton")), TIMEOUT)
+        incrementButton.click()
+
+        val detailsText =
+            uiDevice.wait(findObject(By.res(packageName, "detailsCountTextView")), TIMEOUT)
+
+        Assert.assertEquals(detailsText.text, "Number of results: 691")
+    }
+
+    @Test
+    fun test_DetailsTextDecrement() {
+
+        val editText = uiDevice.findObject(By.res(packageName, "searchEditText"))
+        editText.text = "UiAutomator"
+
+        val searchButton = uiDevice.findObject(By.res(packageName, "searchActivityButton"))
+        searchButton.click()
+
+        sleep(TIMEOUT)
+
+        val toDetails = uiDevice.findObject(By.res(packageName, "toDetailsActivityButton"))
+        toDetails.click()
+
+        val decrementButton =
+            uiDevice.wait(findObject(By.res(packageName, "decrementButton")), TIMEOUT)
+        decrementButton.click()
+
+        val detailsText =
+            uiDevice.wait(findObject(By.res(packageName, "detailsCountTextView")), TIMEOUT)
+
+        Assert.assertEquals(detailsText.text, "Number of results: 689")
+    }
+
+    @Test
+    fun test_EmptyRequest() {
+        val searchButton = uiDevice.findObject(By.res(packageName, "searchActivityButton"))
+        searchButton.click()
+
+        val mainCountTextView =
+            uiDevice.wait(findObject(By.res(packageName, "mainCountTextView")), TIMEOUT)
+
+        Assert.assertNull(mainCountTextView)
+    }
+
+    @Test
+    fun test_ZeroSearchResults() {
+        val editText = uiDevice.findObject(By.res(packageName, "searchEditText"))
+        editText.text = QUASI_REQUEST
+
+        val searchButton = uiDevice.findObject(By.res(packageName, "searchActivityButton"))
+        searchButton.click()
+
+        sleep(TIMEOUT)
+
+        val mainCountTextView =
+            uiDevice.wait(findObject(By.res(packageName, "mainCountTextView")), TIMEOUT)
+
+        Assert.assertEquals(mainCountTextView.text, "Number of results: 0")
+    }
+
     companion object {
+        private const val QUASI_REQUEST = "dshfsfdkj7e1927031hjdgsjfku1021838193ikdhsalf"
         private const val TIMEOUT = 5000L
     }
 }
