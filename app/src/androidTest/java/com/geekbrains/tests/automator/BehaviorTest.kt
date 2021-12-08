@@ -17,6 +17,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.lang.Thread.sleep
 
 @RunWith(AndroidJUnit4::class)
 @SdkSuppress(minSdkVersion = 18)
@@ -104,6 +105,29 @@ class BehaviorTest {
         //Чтобы проверить отображение определенного количества репозиториев,
         //вам в одном и том же методе нужно отправить запрос на сервер и открыть DetailsScreen.
         Assert.assertEquals(changedText.text, "Number of results: 0")
+    }
+
+    @Test
+    fun test_CheckDetailsData() {
+
+        val editText = uiDevice.findObject(By.res(packageName, "searchEditText"))
+        editText.text = "UiAutomator"
+
+        val searchButton = uiDevice.findObject(By.res(packageName, "searchActivityButton"))
+        searchButton.click()
+
+        sleep(3000L)
+
+        val toDetails = uiDevice.findObject(By.res(packageName, "toDetailsActivityButton"))
+        toDetails.click()
+
+        val detailsText =
+            uiDevice.wait(
+                Until.findObject(By.res(packageName, "detailsCountTextView")),
+                TIMEOUT
+            )
+
+        Assert.assertEquals(detailsText.text, "Number of results: 690")
     }
 
     companion object {
