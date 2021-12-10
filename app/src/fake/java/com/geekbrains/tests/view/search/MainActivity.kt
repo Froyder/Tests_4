@@ -12,7 +12,13 @@ import com.geekbrains.tests.presenter.RepositoryContract
 import com.geekbrains.tests.presenter.search.PresenterSearchContract
 import com.geekbrains.tests.repository.FakeGitHubRepository
 import com.geekbrains.tests.view.details.DetailsActivity
+import kotlinx.android.synthetic.fake.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.mainCountTextView
+import kotlinx.android.synthetic.main.activity_main.progressBar
+import kotlinx.android.synthetic.main.activity_main.recyclerView
+import kotlinx.android.synthetic.main.activity_main.searchEditText
+import kotlinx.android.synthetic.main.activity_main.toDetailsActivityButton
 import java.util.*
 
 class MainActivity : AppCompatActivity(), ViewSearchContract {
@@ -31,6 +37,20 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         toDetailsActivityButton.setOnClickListener {
             startActivity(DetailsActivity.getIntent(this, totalCount))
         }
+
+        searchActivityButton.setOnClickListener{
+            val query = searchEditText.text.toString()
+            if (query.isNotBlank()) {
+                presenter.searchGitHub(query)
+            } else {
+                Toast.makeText(
+                    this@MainActivity,
+                    getString(R.string.enter_search_word),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
         setQueryListener()
         setRecyclerView()
     }
