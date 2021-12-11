@@ -7,7 +7,6 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.geekbrains.tests.view.details.DetailsActivity
 import junit.framework.TestCase.assertEquals
@@ -28,7 +27,7 @@ class DetailsActivityTest {
     @Before
     fun setup() {
         scenario = ActivityScenario.launch(DetailsActivity::class.java)
-        context = ApplicationProvider.getApplicationContext()
+        context = setContext()
     }
 
     @Test
@@ -102,13 +101,13 @@ class DetailsActivityTest {
 
     @Test
     fun activityCreateIntent_NotNull() {
-        val intent = DetailsActivity.getIntent(context, 0)
+        val intent = DetailsActivity.getIntent(context, DEFAULT_VALUE)
         assertNotNull(intent)
     }
 
     @Test
     fun activityCreateIntent_HasExtras() {
-        val intent = DetailsActivity.getIntent(context, 0)
+        val intent = DetailsActivity.getIntent(context, DEFAULT_VALUE)
         val bundle = intent.extras
         assertNotNull(bundle)
     }
@@ -117,7 +116,7 @@ class DetailsActivityTest {
     fun activityCreateIntent_HasCount() {
         val intent = DetailsActivity.getIntent(context, TEST_NUMBER)
         val bundle = intent.extras
-        assertEquals(TEST_NUMBER, bundle?.getInt(DetailsActivity.TOTAL_COUNT_EXTRA, 0))
+        assertEquals(TEST_NUMBER, bundle?.getInt(DetailsActivity.TOTAL_COUNT_EXTRA, DEFAULT_VALUE))
     }
 
     @After

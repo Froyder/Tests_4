@@ -1,11 +1,10 @@
 package com.geekbrains.tests.automator
 
-import android.content.Context
-import androidx.test.core.app.ApplicationProvider.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.UiDevice
+import com.geekbrains.tests.setContext
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -15,7 +14,7 @@ import org.junit.runner.RunWith
 class InitialTest {
 
     //Контекст нам понадобится для запуска нужных экранов и получения packageName
-    private val context = getApplicationContext<Context>()
+    private val context = setContext()
 
     //Путь к классам нашего приложения, которые мы будем тестировать
     private val packageName = context.packageName

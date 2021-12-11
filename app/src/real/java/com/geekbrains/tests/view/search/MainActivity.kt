@@ -10,7 +10,6 @@ import com.geekbrains.tests.R
 import com.geekbrains.tests.model.SearchResult
 import com.geekbrains.tests.presenter.search.PresenterSearchContract
 import com.geekbrains.tests.presenter.search.SearchPresenter
-import com.geekbrains.tests.repository.GitHubRepository
 import com.geekbrains.tests.view.details.DetailsActivity
 import kotlinx.android.synthetic.main.activity_details.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -50,6 +49,10 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+        }
+
+        testActivityButton.setOnClickListener{
+            searchEditText.setText(R.string.test_value)
         }
 
         setQueryListener()
