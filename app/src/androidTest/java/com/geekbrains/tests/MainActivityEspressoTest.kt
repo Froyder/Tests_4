@@ -58,14 +58,14 @@ class MainActivityEspressoTest {
 
     @Test
     fun activityElements_HasText() {
-        onView(withId(R.id.searchEditText)).check(matches(withText("")))
+        onView(withId(R.id.searchEditText)).check(setAssertionText(""))
         onView(withId(R.id.toDetailsActivityButton)).check(matches(withText(R.string.to_details)))
     }
 
     @Test
     fun activityElements_IsDisplayed() {
-        onView(withId(R.id.searchEditText)).check(matches(isDisplayed()))
-        onView(withId(R.id.toDetailsActivityButton)).check(matches(isDisplayed()))
+        viewIsDisplayed(R.id.searchEditText)
+        viewIsDisplayed(R.id.toDetailsActivityButton)
     }
 
     @Test
@@ -83,26 +83,27 @@ class MainActivityEspressoTest {
 
     @Test
     fun activitySearch_IsWorking() {
-        onView(withId(R.id.searchEditText)).perform(click())
+        clickOnView(R.id.searchEditText)
+
         onView(withId(R.id.searchEditText)).perform(replaceText("algol"), closeSoftKeyboard())
         onView(withId(R.id.searchEditText)).perform(pressImeActionButton())
 
         if (BuildConfig.TYPE == MainActivity.FAKE) {
-            onView(withId(R.id.mainCountTextView)).check(matches(withText("Number of results: 42")))
+            onView(withId(R.id.mainCountTextView)).check(setAssertionText("Number of results: 42"))
         } else {
             onView(isRoot()).perform(delay())
-            onView(withId(R.id.mainCountTextView)).check(matches(withText("Number of results: 2693")))
+            onView(withId(R.id.mainCountTextView)).check(setAssertionText("Number of results: 2693"))
         }
     }
 
     @Test
     fun activityToDetailsButton_IsWorking() {
-        onView(withId(R.id.toDetailsActivityButton)).perform(click())
+        clickOnView(R.id.toDetailsActivityButton)
 
         //проверяем, что после нажатия на кнопку на экране появились элементы из другой активити
-        onView(withId(R.id.detailsCountTextView)).check(matches(isDisplayed()))
-        onView(withId(R.id.incrementButton)).check(matches(isDisplayed()))
-        onView(withId(R.id.decrementButton)).check(matches(isDisplayed()))
+        viewIsDisplayed(R.id.detailsCountTextView)
+        viewIsDisplayed(R.id.incrementButton)
+        viewIsDisplayed(R.id.decrementButton)
     }
 
     private fun delay(): ViewAction? {
