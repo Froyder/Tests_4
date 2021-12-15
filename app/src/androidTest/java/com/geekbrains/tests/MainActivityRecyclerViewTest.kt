@@ -100,6 +100,31 @@ class MainActivityRecyclerViewTest {
         onView(withId(R.id.searchEditText)).perform(pressImeActionButton())
     }
 
+    @Test
+    fun fragment_RecyclerTest() {
+        if (BuildConfig.TYPE != MainActivity.FAKE) {
+            loadList()
+
+            Thread.sleep(3000)
+
+            onView(withId(R.id.recyclerView))
+                .perform(
+                    RecyclerViewActions.scrollToPosition<SearchResultViewHolder>(15)
+                )
+
+            Thread.sleep(3000)
+
+            onView(withId(R.id.recyclerView))
+                .perform(
+                    RecyclerViewActions
+                        .actionOnItemAtPosition<SearchResultViewHolder>(
+                            7,
+                            click()
+                        )
+                )
+        }
+    }
+
     private fun tapOnItemWithId(id: Int) = object : ViewAction {
         override fun getConstraints(): Matcher<View>? {
             return null

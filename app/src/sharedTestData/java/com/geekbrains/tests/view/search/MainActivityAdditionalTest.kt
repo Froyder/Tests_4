@@ -33,20 +33,20 @@ class MainActivityAdditionalTest {
 
     @Test
     fun mainActivityAdditionalTest() {
-//        val materialButton = onView(
-//            allOf(
-//                withId(R.id.testActivityButton), withText("test"),
-//                childAtPosition(
-//                    childAtPosition(
-//                        withId(android.R.id.content),
-//                        0
-//                    ),
-//                    4
-//                ),
-//                isDisplayed()
-//            )
-//        )
-//        materialButton.perform(click())
+        val materialButton = onView(
+            allOf(
+                withId(R.id.testActivityButton), withText("test"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(android.R.id.content),
+                        0
+                    ),
+                    4
+                ),
+                isDisplayed()
+            )
+        )
+        materialButton.perform(click())
 
         val materialButton2 = onView(
             allOf(
