@@ -39,24 +39,24 @@ class DetailsActivityEspressoTest {
     @Test
     fun activityTextView_NotNull() {
         scenario.onActivity {
-            val totalCountTextView = it.findViewById<TextView>(R.id.detailsCountTextView)
+            val totalCountTextView = it.findViewById<TextView>(R.id.detailsFragmentTextView)
             TestCase.assertNotNull(totalCountTextView)
         }
     }
 
     @Test
     fun activityTextView_HasText() {
-        onView(withId(R.id.detailsCountTextView)).check(setAssertionText(TEST_NUMBER_OF_RESULTS_ZERO))
+        onView(withId(R.id.detailsFragmentTextView)).check(setAssertionText(TEST_NUMBER_OF_RESULTS_ZERO))
     }
 
     @Test
     fun activityTextView_IsDisplayed() {
-        viewIsDisplayed(R.id.detailsCountTextView)
+        viewIsDisplayed(R.id.detailsFragmentTextView)
     }
 
     @Test
     fun activityTextView_IsCompletelyDisplayed() {
-        onView(withId(R.id.detailsCountTextView)).check(matches(isCompletelyDisplayed()))
+        onView(withId(R.id.detailsFragmentTextView)).check(matches(isCompletelyDisplayed()))
     }
 
     @Test
@@ -68,13 +68,13 @@ class DetailsActivityEspressoTest {
     @Test
     fun activityButtonIncrement_IsWorking() {
         clickOnView(R.id.incrementButton)
-        onView(withId(R.id.detailsCountTextView)).check(setAssertionText(TEST_NUMBER_OF_RESULTS_PLUS_1))
+        onView(withId(R.id.detailsFragmentTextView)).check(setAssertionText(TEST_NUMBER_OF_RESULTS_PLUS_1))
     }
 
     @Test
     fun activityButtonDecrement_IsWorking() {
         clickOnView(R.id.decrementButton)
-        onView(withId(R.id.detailsCountTextView)).check(setAssertionText(TEST_NUMBER_OF_RESULTS_MINUS_1))
+        onView(withId(R.id.detailsFragmentTextView)).check(setAssertionText(TEST_NUMBER_OF_RESULTS_MINUS_1))
     }
 
     @After

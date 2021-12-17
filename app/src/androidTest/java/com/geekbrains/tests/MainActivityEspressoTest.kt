@@ -101,7 +101,7 @@ class MainActivityEspressoTest {
         clickOnView(R.id.toDetailsActivityButton)
 
         //проверяем, что после нажатия на кнопку на экране появились элементы из другой активити
-        viewIsDisplayed(R.id.detailsCountTextView)
+        viewIsDisplayed(R.id.detailsFragmentTextView)
         viewIsDisplayed(R.id.incrementButton)
         viewIsDisplayed(R.id.decrementButton)
     }

@@ -62,7 +62,7 @@ class MainActivityTest {
 
         val textView = onView(
             allOf(
-                withId(R.id.detailsCountTextView), withText("Number of results: 1"),
+                withId(R.id.detailsFragmentTextView), withText("Number of results: 1"),
                 withParent(withParent(withId(android.R.id.content))),
                 isDisplayed()
             )
