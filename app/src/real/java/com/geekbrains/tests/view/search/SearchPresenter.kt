@@ -1,10 +1,14 @@
 package com.geekbrains.tests.presenter.search
 
+import com.geekbrains.tests.SchedulerProvider
+import com.geekbrains.tests.SearchSchedulerProvider
 import com.geekbrains.tests.model.SearchResponse
 import com.geekbrains.tests.presenter.RepositoryContract
 import com.geekbrains.tests.repository.GitHubRepository
 import com.geekbrains.tests.repository.RepositoryCallback
 import com.geekbrains.tests.view.search.ViewSearchContract
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableObserver
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.java.KoinJavaComponent.inject
@@ -19,14 +23,45 @@ import retrofit2.Response
  */
 
 internal class SearchPresenter internal constructor(
-    private val viewContract: ViewSearchContract
+    private val viewContract: ViewSearchContract,
+    private val repository: GitHubRepository,
+    private val appSchedulerProvider: SchedulerProvider = SearchSchedulerProvider()
 ) : PresenterSearchContract, RepositoryCallback, KoinComponent {
 
-    private val repository: GitHubRepository by inject()
+    //private val repository: GitHubRepository by inject()
 
     override fun searchGitHub(searchQuery: String) {
-        viewContract.displayLoading(true)
-        repository.searchGithub(searchQuery, this)
+        //Dispose
+        val compositeDisposable = CompositeDisposable()
+        compositeDisposable.add(
+            repository.searchGithub(searchQuery)
+                .subscribeOn(appSchedulerProvider.io())
+                .observeOn(appSchedulerProvider.ui())
+                .doOnSubscribe { viewContract.displayLoading(true) }
+                .doOnTerminate { viewContract.displayLoading(false) }
+                .subscribeWith(object : DisposableObserver<SearchResponse>() {
+
+                    override fun onNext(searchResponse: SearchResponse) {
+                        val searchResults = searchResponse.searchResults
+                        val totalCount = searchResponse.totalCount
+                        if (searchResults != null && totalCount != null) {
+                            viewContract.displaySearchResults(
+                                searchResults,
+                                totalCount
+                            )
+                        } else {
+                            viewContract.displayError("Search results or total count are null")
+                        }
+                    }
+
+                    override fun onError(e: Throwable) {
+                        viewContract.displayError(e.message ?: "Response is null or unsuccessful")
+                    }
+
+                    override fun onComplete() {}
+                }
+                )
+        )
     }
 
     override fun handleGitHubResponse(response: Response<SearchResponse?>?) {

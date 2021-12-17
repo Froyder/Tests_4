@@ -10,3 +10,8 @@ val repository = module {
     single { GitHubRepository(gitHubApi = get())}
     single { FakeGitHubRepository()}
 }
+
+val testModule = module {
+    single { ApiHolder() }
+    single { GitHubRepository(gitHubApi = get())}
+}
