@@ -22,7 +22,7 @@ internal class FakeGitHubRepository : RepositoryContract {
 
     private fun generateSearchResponse(): SearchResponse {
         val list: MutableList<SearchResult> = mutableListOf()
-        for (index in 1..100) {
+        for (index in 1..42) {
             list.add(
                 SearchResult(
                     id = index,

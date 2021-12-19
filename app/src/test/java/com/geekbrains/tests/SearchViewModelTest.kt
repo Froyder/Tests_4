@@ -6,20 +6,13 @@ import androidx.lifecycle.Observer
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.geekbrains.tests.model.SearchResponse
 import com.geekbrains.tests.repository.FakeGitHubRepository
-import com.geekbrains.tests.stubs.ScheduleProviderStub
 import com.geekbrains.tests.viewmodel.ScreenState
 import com.geekbrains.tests.viewmodel.SearchViewModel
-import com.nhaarman.mockito_kotlin.times
-import com.nhaarman.mockito_kotlin.verify
-import io.reactivex.Observable
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
+import org.koin.core.context.stopKoin
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import org.robolectric.annotation.Config
@@ -69,6 +62,57 @@ class SearchViewModelTest {
 
     @ExperimentalCoroutinesApi
     @Test
+    fun coroutines_TestReturnListWithExactSize() {
+        testCoroutineRule.runBlockingTest {
+            val observer = Observer<ScreenState> {}
+            val liveData = searchViewModel.subscribeToLiveData()
+
+            `when`(repository.searchGithubAsync(SEARCH_QUERY)).thenReturn(
+                SearchResponse(TEST_NUMBER, listOf())
+            )
+
+            try {
+                liveData.observeForever(observer)
+                searchViewModel.searchGitHub(SEARCH_QUERY)
+
+                val expected = repository.searchGithubAsync(SEARCH_QUERY)
+                val actual = TEST_NUMBER
+
+                Assert.assertEquals(expected.totalCount, actual)
+                Assert.assertNotNull(liveData.value)
+            } finally {
+                liveData.removeObserver(observer)
+            }
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun coroutines_TestReturnWorking() {
+        testCoroutineRule.runBlockingTest {
+            val observer = Observer<ScreenState> {}
+            val liveData = searchViewModel.subscribeToLiveData()
+
+            `when`(repository.searchGithubAsync(SEARCH_QUERY)).thenReturn(
+                SearchResponse(TEST_NUMBER, listOf())
+            )
+
+            try {
+                liveData.observeForever(observer)
+                searchViewModel.searchGitHub(SEARCH_QUERY)
+
+                val expected = liveData.value as ScreenState.Working
+                val actual = ScreenState.Working(repository.searchGithubAsync(SEARCH_QUERY))
+
+                Assert.assertEquals(expected, actual)
+            } finally {
+                liveData.removeObserver(observer)
+            }
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    @Test
     fun coroutines_TestReturnValueIsError() {
         testCoroutineRule.runBlockingTest {
             val observer = Observer<ScreenState> {}
@@ -107,6 +151,11 @@ class SearchViewModelTest {
                 liveData.removeObserver(observer)
             }
         }
+    }
+
+    @After
+    fun afterTests(){
+        stopKoin()
     }
 
     companion object {
