@@ -14,7 +14,7 @@ val main = module {
     single { ApiHolder() }
     single <RepositoryContract> { GitHubRepository(gitHubApi = get())}
     single <SchedulerProvider> { SearchSchedulerProvider()}
-    viewModel { SearchViewModel (repository = get(), appSchedulerProvider = get()) }
+    viewModel { SearchViewModel (repository = get()) }
     single { FakeGitHubRepository()}
 }
 
@@ -22,6 +22,6 @@ val testModule = module {
     single { ApiHolder() }
     single <RepositoryContract> { GitHubRepository(gitHubApi = get())}
     single <SchedulerProvider> { SearchSchedulerProvider()}
-    viewModel { SearchViewModel (repository = get(), appSchedulerProvider = get()) }
+    viewModel { SearchViewModel (repository = get()) }
     single { FakeGitHubRepository()}
 }
