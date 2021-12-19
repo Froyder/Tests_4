@@ -9,7 +9,7 @@ class MainApp : Application() {
         super.onCreate()
 
         startKoin {
-            modules(listOf(repository))
+            modules(listOf(main))
         }
     }
 
