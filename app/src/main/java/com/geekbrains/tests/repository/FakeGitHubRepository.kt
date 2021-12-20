@@ -3,6 +3,7 @@ package com.geekbrains.tests.repository
 import com.geekbrains.tests.model.SearchResponse
 import com.geekbrains.tests.model.SearchResult
 import com.geekbrains.tests.presenter.RepositoryContract
+import io.reactivex.Observable
 import retrofit2.Response
 import kotlin.random.Random
 
@@ -12,12 +13,16 @@ internal class FakeGitHubRepository : RepositoryContract {
         query: String,
         callback: RepositoryCallback
     ) {
-        callback.handleGitHubResponse(Response.success(getFakeResponse()))
+        callback.handleGitHubResponse(Response.success(generateSearchResponse()))
     }
 
-    private fun getFakeResponse(): SearchResponse {
+    override fun searchGithub(query: String): Observable<SearchResponse> {
+        return Observable.just(generateSearchResponse())
+    }
+
+    private fun generateSearchResponse(): SearchResponse {
         val list: MutableList<SearchResult> = mutableListOf()
-        for (index in 1..100) {
+        for (index in 1..42) {
             list.add(
                 SearchResult(
                     id = index,
@@ -36,5 +41,9 @@ internal class FakeGitHubRepository : RepositoryContract {
             )
         }
         return SearchResponse(list.size, list)
+    }
+
+    override suspend fun searchGithubAsync(query: String): SearchResponse {
+        return generateSearchResponse()
     }
 }
